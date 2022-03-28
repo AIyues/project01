@@ -1,0 +1,48 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team11.server.mapper.CourseManageMapper">
+    <resultMap id="selCourseMap" type="com.team11.server.pojo.dto.Course">
+        <id column="id" property="id"/>
+        <result column="course_name" property="courseName"/>
+        <result column="course_type" property="courseType"/>
+        <result column="name" property="teacherName"/>
+        <result column="department_name" property="deptName"/>
+    </resultMap>
+
+    <!--获取所有课程信息-->
+    <select id="SelAllCourse" resultMap="selCourseMap">
+        SELECT
+            course.id,
+            course.course_name,
+            course.course_type,
+            users.`name`,
+            department.department_name
+        FROM
+            course,
+            department,
+            users
+        WHERE
+            course.dept_id = department.id
+          AND course.teacher_id = users.id
+    </select>
+
+    <!--查询学生是否已选课程-->
+    <select id="SelCountCourse" resultType="Integer" parameterType="hashmap">
+        SELECT
+            count(*)
+        FROM
+            course_student
+        WHERE
+            course_id = #{courseId}
+          AND student_id = #{studentId}
+    </select>
+
+    <!--学生选择课程-->
+    <insert id="InsertStuToCourse" parameterType="hashmap">
+        INSERT INTO course_student ( course_id, student_id )
+        VALUES
+        (
+            #{courseId},
+            #{studentId})
+    </insert>
+
+</mapper>

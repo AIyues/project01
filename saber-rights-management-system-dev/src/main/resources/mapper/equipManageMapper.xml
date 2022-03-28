@@ -1,0 +1,68 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team11.server.mapper.EquipManageMapper">
+    <resultMap id="equipResultMap" type="com.team11.server.pojo.dto.EquipBean">
+        <id column="id" property="id"/>
+        <result column="equip_name" property="equipName"/>
+        <result column="equip_type" property="equipType"/>
+        <result column="equip_model" property="equipModel"/>
+        <result column="equip_num" property="equipNum"/>
+        <result column="equip_img" property="equipImg"/>
+    </resultMap>
+
+
+    <!--查询所有设备信息-->
+    <select id="GetAllEquip" resultMap="equipResultMap">
+        SELECT
+            equipment.id,
+            equipment.equip_name,
+            equipment.equip_type,
+            equipment.equip_model,
+            equipment.equip_num,
+            equipment.equip_img
+        FROM
+            equipment
+    </select>
+
+    <!--更新设备信息-->
+    <update id="UpdateEquip" parameterType="hashmap">
+        UPDATE equipment
+        <set>
+            <if test="null!=equipName and ''!=equipName">
+                equipment.equip_name = #{equipName},
+            </if>
+            <if test="null!=equipType and ''!=equipType">
+                equipment.equip_type = #{equipType},
+            </if>
+            <if test="null!=equipModel and ''!=equipModel">
+                equipment.equip_model = #{equipModel},
+            </if>
+            <if test="null!=equipNum and ''!=equipNum">
+                equipment.equip_num = #{equipNum},
+            </if>
+        </set>
+        WHERE
+            equipment.id = #{id}
+    </update>
+
+    <!--新增设备信息-->
+    <insert id="InsertEquip" parameterType="hashmap">
+        INSERT INTO equipment ( equipment.equip_name, equipment.equip_model, equipment.equip_type, equipment.equip_num )
+        VALUES
+            (
+                #{equipName},
+                #{equipModel},
+                #{equipType},
+                #{equipNum})
+    </insert>
+
+    <!--删除设备信息-->
+    <delete id="DeleteEquip" parameterType="Integer">
+        DELETE
+        FROM
+            equipment
+        WHERE
+            equipment.id = #{id}
+    </delete>
+
+
+</mapper>

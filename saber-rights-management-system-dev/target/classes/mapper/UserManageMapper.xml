@@ -1,0 +1,84 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team11.server.mapper.UserManageMapper">
+
+    <resultMap id="SelUsersExport" type="com.team11.server.pojo.dto.ExcelUsers">
+        <id column="id" property="id"/>
+        <result property="userId" column="r_id"/>
+        <result property="username" column="name"/>
+        <result property="password" column="r_password"/>
+        <result property="sex" column="sex"/>
+        <result property="idCard" column="id_card"/>
+        <result property="phone" column="phone"/>
+        <result property="type" column="t_type"/>
+        <result property="state" column="state"/>
+        <result property="email" column="email"/>
+    </resultMap>
+    <select id="TermSelUser" parameterType="hashmap" resultType="com.team11.server.pojo.dto.Users">
+        SELECT
+        id,
+        r_id AS rId,
+        NAME,
+        r_password AS rPassword,
+        sex,
+        id_card AS idCard,
+        email,
+        phone,
+        t_type AS tType,
+        state
+        FROM
+            `users`
+        <where>
+            users.is_delete = '1'
+            <if test="null!=name and ''!=name">
+                AND users.`name` = #{name}
+            </if>
+            <if test="null!=rId and ''!=rId">
+                AND users.r_id = #{rId}
+            </if>
+            <if test="null!=tType and ''!=tType">
+                AND users.t_type = #{tType}
+            </if>
+        </where>
+    </select>
+
+    <select id="SelUsersToExcel" resultMap="SelUsersExport">
+        select *
+                   from users where users.is_delete = '1'
+    </select>
+
+
+    <!--导入用户信息-->
+    <insert id="importUser" parameterType="com.team11.server.pojo.dto.ExcelUsers">
+        INSERT INTO users (r_id, NAME, r_password, t_type, state, id_card, email, phone, sex )
+        VALUES
+        (
+            #{userId},
+            #{username},
+            #{password},
+            #{type},
+            #{state},
+            #{idCard},
+            #{email},
+            #{phone},
+            #{sex})
+    </insert>
+
+    <!-- 查询导入的用户是否已存在-->
+    <select id="SelUser" parameterType="String" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            users
+        WHERE
+            r_id = #{userId}
+    </select>
+
+    <!--若用户已存在则删除该用户再插入-->
+    <delete id="DeleteUser" parameterType="String">
+        DELETE
+        FROM
+            users
+        WHERE
+            r_id = #{userId}
+    </delete>
+</mapper>

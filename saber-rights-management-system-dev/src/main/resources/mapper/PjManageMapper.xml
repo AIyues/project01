@@ -1,0 +1,37 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team11.server.mapper.PjManageMapper">
+    <!--判断学生是否已对当前老师评教-->
+    <select id="SelPj" parameterType="hashmap" resultType="Integer">
+        SELECT
+            Count(id)
+        FROM
+            pj_t_s
+        WHERE
+            pj_t_s.pj_student = #{pjStudent}
+          AND pj_t_s.pj_teacher =#{pjTeacher}
+    </select>
+
+    <!--插入评教信息-->
+    <insert id="InsertPj" parameterType="hashmap">
+        INSERT INTO pj_t_s ( pj_t_s.pj_core, pj_t_s.pj_student, pj_t_s.pj_teacher )
+        VALUES
+        (
+            #{cores},
+            #{pjStudent},
+            #{pjTeacher})
+    </insert>
+
+    <!--教师查看当前学生给自己的评教信息-->
+    <select id="SelPjByTid" parameterType="String" resultType="com.team11.server.pojo.dto.PjTeacher">
+        SELECT pj_t_s.pj_core as pjCore,
+               users.`name`
+        FROM
+            pj_t_s,
+            users
+        WHERE
+            pj_t_s.pj_student=users.r_id
+          AND
+            pj_t_s.pj_teacher=#{rid}
+    </select>
+
+</mapper>

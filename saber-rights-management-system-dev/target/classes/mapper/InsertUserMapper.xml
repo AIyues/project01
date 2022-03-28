@@ -1,0 +1,17 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team11.server.mapper.InsertUserMapper">
+
+<insert id="insertUser" parameterType="hashmap">
+    INSERT INTO users ( r_id, `name`, r_password, t_type)
+    VALUES
+    (
+        #{r_id},
+        #{name},
+        '$2a$10$8XHYgI7bx48BUwVKlAMa5.4fcrHe82r/ocqOhMtteA68TjN1Wooa6',
+        #{t_type}
+        )
+</insert>
+
+
+
+</mapper>

@@ -1,0 +1,35 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.team11.server.mapper.UpdateUserMapper">
+    <update id="updateUser" parameterType="hashmap">
+        UPDATE users
+        <set>
+        <if test="null!=name and ''!=name">
+            users.`name` = #{name},
+        </if>
+            <if test="null!=tType and ''!=tType">
+                users.t_type = #{tType},
+            </if>
+            <if test="null!=state and ''!=state">
+                users.state = #{state},
+            </if>
+            <if test="null!=idCard and ''!=idCard">
+                users.id_card = #{idCard},
+            </if>
+            <if test="null!=email and ''!=email">
+                users.email = #{email},
+            </if>
+            <if test="null!=phone and ''!=phone">
+                users.phone = #{phone},
+            </if>
+            <if test="null!=sex and ''!=sex">
+                users.sex = #{sex}
+            </if>
+            <if test="0==deleteNum">
+                users.is_delete = #{deleteNum}
+            </if>
+        </set>
+            WHERE
+            users.id = #{id}
+    </update>
+
+</mapper>
